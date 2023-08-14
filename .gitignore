@@ -120,3 +120,6 @@ __MACOSX/
 Inspiration/*
 *.zip
 *movie*
+
+# To keep paths consistent
+my_inpaint_config.json

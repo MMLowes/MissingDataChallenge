@@ -8,6 +8,7 @@ from skimage.metrics import structural_similarity
 from skimage.metrics import mean_squared_error
 from skimage.metrics import peak_signal_noise_ratio
 from tqdm import tqdm
+import pandas as pd
 
 
 def compute_inpaint_metrics(org_img, inpainted_img):
@@ -35,10 +36,10 @@ def evaluate_inpainting(settings):
     if file_ids is None:
         return
 
-    f = open(evaluation_file, 'w')
+    f = open(evaluation_file, "w")
     print(f"Evaluating {len(file_ids)} images")
 
-    f.write('id, mse, ssim, psnr\n')
+    f.write("id, mse, ssim, psnr\n")
     for idx in tqdm(file_ids):
         org_image_name = os.path.join(input_data_dir, "originals", f"{idx}.jpg")
         inpainted_image_name = os.path.join(inpainted_result_dir, f"{idx}.png")
@@ -50,9 +51,22 @@ def evaluate_inpainting(settings):
         # print(f'MSE: {metrics["mse"]} SSIM: {metrics["ssim"]} PSNR: {metrics["psnr"]}')
         f.write(f'{idx}, {metrics["mse"]}, {metrics["ssim"]}, {metrics["psnr"]}\n')
 
+    f.close()
 
-if __name__ == '__main__':
-    args = argparse.ArgumentParser(description='EvaluateInPaintings')
+    # Step 1: Load the CSV file
+    df = pd.read_csv(evaluation_file)
+
+    # Step 2: Calculate the mean of each column
+    means = df[[" mse", " ssim", " psnr"]].mean()
+
+    # Step 3: Print the results in a pretty manner
+    print("Mean of each column:")
+    for col_name, mean_value in means.items():
+        print(f"{col_name}: {mean_value:.2f}")
+
+
+if __name__ == "__main__":
+    args = argparse.ArgumentParser(description="EvaluateInPaintings")
     config = InPaintConfig(args)
     if config.settings is not None:
         evaluate_inpainting(config.settings)

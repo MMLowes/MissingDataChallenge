@@ -123,5 +123,5 @@ Inspiration/*
 
 # To keep paths consistent
 my_inpaint_config.json
-my_inpaint_config.json
 pictures/*
+execute_pipe.cmd

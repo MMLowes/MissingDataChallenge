@@ -53,5 +53,6 @@ def inpaint_images(settings):
 if __name__ == '__main__':
     args = argparse.ArgumentParser(description='InpaintImages')
     config = InPaintConfig(args)
+    # print(vars(config))
     if config.settings is not None:
         inpaint_images(config.settings)

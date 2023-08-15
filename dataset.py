@@ -1,3 +1,11 @@
+import os
+from skimage import io
+import numpy as np
+import torch
+import torch.nn as nn
+from inpaint_tools import read_file_list
+from torch.utils.data import Dataset
+
 class CatDataset(Dataset):
     def __init__(self,settings,test=False):
         input_data_dir = settings["dirs"]["input_data_dir"]

@@ -31,3 +31,26 @@ def save_image(save_name, output, mask, image):
     arr = np.concatenate((image,mask,output,combined),1)
     arr = np.clip(arr,0,1)
     io.imsave(save_name, arr)
+
+def save_inp_out(save_name, output, mask, masked_image):
+    
+    output = output.permute(1,2,0).detach().cpu().numpy()
+    mask = mask.squeeze().cpu().numpy()
+    masked_image = masked_image.permute(1,2,0).cpu().numpy()[:,:,:3]
+    mask = np.stack((mask,mask,mask),-1)
+    combined = copy.deepcopy(masked_image)
+    combined[mask.astype(np.bool)] = output[mask.astype(np.bool)]
+    arr = np.concatenate((masked_image,combined),1)
+    arr = np.clip(arr,0,1)
+    io.imsave(save_name, arr)
+
+def save_test_image(save_name, output, mask, masked_image):
+    output = output.permute(1,2,0).detach().cpu().numpy()
+    mask = mask.squeeze().cpu().numpy()
+    masked_image = masked_image.permute(1,2,0).cpu().numpy()[:,:,:3]
+    mask = np.stack((mask,mask,mask),-1)
+    combined = copy.deepcopy(masked_image)
+    combined[mask.astype(np.bool)] = output[mask.astype(np.bool)]
+    # arr = np.concatenate((image,mask,output,combined),1)
+    # arr = np.clip(arr,0,1)
+    io.imsave(save_name, combined)
